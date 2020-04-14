@@ -3,21 +3,19 @@ layout: default
 title: Tutorial setup
 ---
 
-To explain how to use Dagger, we will build a command line
-[ATM](https://en.wikipedia.org/wiki/Automated_teller_machine) application. It
-will track the balance of accounts, and accept commands on the command line:
+为了解释如何使用 Dagger, 我们将构建一个命令行
+[ATM](https://en.wikipedia.org/wiki/Automated_teller_machine) 应用程序。
+它将跟踪帐户余额，并在命令行上接受命令：
 
 ```
 > deposit 20
 > withdraw 10
 ```
 
-Let's start with building the shell of this application, first without Dagger.
-If some aspects appear to be overly complicated, bear with us, as Dagger starts
-to show its power once applications grow larger.
+让我们从构建此应用程序的外壳开始，刚开始不使用 Dagger。
+如果某些方面看起来过于复杂，请耐心等待，因为一旦应用程序变大，Dagger 就开始展示其强大功能。
 
-First, we'll create a `Command` interface for each of the possible textual
-commands that the ATM can handle.
+首先，我们将为 ATM 可以处理的每个可能的文本命令创建一个`命令`界面。
 
 ```java
 /** Logic to process some user input. */
@@ -38,9 +36,9 @@ interface Command {
 }
 ```
 
-And we'll create a `CommandRouter` that can collect multiple `Command`s and
-route input strings to them based on the first word in the input. To start,
-we'll give it an empty map of commands.
+然后我们将创建一个 `CommandRouter`，它可以收集多个 `Command`
+并根据输入中的第一个单词将输入字符串路由到它们。
+首先，我们将为它提供一个空的命令映射。
 
 ```java
 final class CommandRouter {
@@ -77,7 +75,7 @@ final class CommandRouter {
 }
 ```
 
-Finally, we'll create a main method:
+最后，我们将创建一个 main 方法：
 
 ```java
 class CommandLineAtm {
@@ -92,8 +90,8 @@ class CommandLineAtm {
 }
 ```
 
-Congratulations! We now have a working command line ATM! It doesn't do anything
-just yet, but very soon we'll change that.
+恭喜你！现在，我们有了一个在命令行运行的 ATM！
+它暂时什么都没做，但是很快我们将改变它。
 
 <section style="text-align: center" markdown="1">
   [Previous](index) · [Next](02-initial-dagger)
