@@ -1,31 +1,28 @@
 ---
 layout: default
-title: Dagger
+title: Dagger 中文翻译
 ---
 
-Dagger is a fully static, compile-time [dependency injection][DI] framework for
-both Java and Android. It is an adaptation of an earlier version
-[created](https://github.com/square/dagger) by
-[Square] and now maintained by Google.
+Dagger 是适用于 Java 和 Android 的全静态、编译时[依赖注入] [DI]框架。
+它是对 [Square] 创建的[早期版本](https://github.com/square/dagger)的改编，
+现在由 Google 维护。
 
-Dagger aims to address many of the development and performance issues that have
-plagued reflection-based solutions. More details can be found in
-[this talk][dagger-talk-video] ([slides][dagger-talk-slides]) by
-[Gregory Kick][gak].
+Dagger 旨在解决基于反射的解决方案的许多开发和性能问题。
+更多细节可以看 [Gregory Kick][gak] 的 [this talk][dagger-talk-video] ([slides][dagger-talk-slides])。
 
-## Where are the docs?
+## 文档在哪？
 
-* [User documentation](users-guide)
+* [用户手册](users-guide)
 * [Dagger API @ HEAD][api-docs]
 
-## Where is the code?
+## 代码在哪？
 
 * <https://github.com/google/dagger>
 
-## Have a question?
+## 有问题？
 
-* Ask it on Stack Overflow with the [dagger-2][stack-overflow] tag
-* Send an email to [dagger-discuss@googlegroups.com][dagger-discuss]
+* 使用 [dagger-2][stack-overflow] 标签在 Stack Overflow 上提问
+* 发送邮件到 [dagger-discuss@googlegroups.com][dagger-discuss]
 
 <!-- References -->
 
