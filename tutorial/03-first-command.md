@@ -3,10 +3,10 @@ layout: default
 title: Adding our first `Command`
 ---
 
-If you've tried to run the example so far, you'll see that it doesn't know how
-to respond to any commands. Let's change that!
+如果您到目前为止已尝试运行该示例，则会看到它不知道如何
+响应命令。让我们改变它！
 
-First, let's create an implementation of `Command`:
+首先，让我们实现一个 `Command`:
 
 ```java
 final class HelloWorldCommand implements Command {
@@ -29,7 +29,7 @@ final class HelloWorldCommand implements Command {
 }
 ```
 
-Now let's add a parameter to `CommandRouter`'s constructor for that command:
+现在，为这个实现给`CommandRouter` 的构造函数添加一个参数：
 
 ```java
 final class CommandRouter {
@@ -44,34 +44,34 @@ final class CommandRouter {
 }
 ```
 
-This parameter tells Dagger that when it creates a `CommandRouter` instance, it
-should also provide a `HelloWorldCommand` instance and pass that to the
-constructor: `new CommandRouter(helloWorldCommand)`. Dagger knows how to create
-a `HelloWorldCommand` because it has an [`@Inject`] constructor, just like
-`CommandRouter`.
+这个参数告诉 Dagger，当它创建一个 CommandRouter 实例时，它
+还应提供一个`HelloWorldCommand` 实例，并将其传递给
+构造函数：`new CommandRouter(helloWorldCommand)`。Dagger 知道如何创造
+一个 `HelloWorldCommand`，因为它具有 [`@Inject`] 构造函数，就像
+`CommandRouter`。
 
-If you try to run the application, you'll see that you can now type `hello` and
-the application will respond `world!`. We're making progress!
+如果尝试运行该应用程序，将会看到您现在可以输入 `hello` 并且
+应用程序将响应 `world!`。我们正在进步！
 
-> **CONCEPTS**
+> **概念**
 >
-> *   Parameters to an [`@Inject`] constructor are the dependencies of the
->     class. Dagger will provide a class's dependencies to instantiate the class
->     itself. Note that this is recursive: a dependency may have dependencies of
->     its own!
-> *   **Terminology:**
->     *   When discussing the relationship between these two types, one might
->         say `CommandRouter` _requests_ `HelloWorldCommand` or `CommandRouter`
->         _depends on_ `HelloWorldCommand`. Conversely, `HelloWorldCommand`'s
->         `@Inject` constructor _provides_ instances of `HelloWorldCommand`,
->         which are _requested by_ `CommandRouter`.
->     *   Sometimes people say `CommandRouter` _injects_ `HelloWorldCommand` in
->         order to emphasize that something else puts a `HelloWorldCommand`
->         object into `CommandRouter`, in contrast to `CommandRouter` itself
->         fetching or creating one. But it's also common to say that _Dagger_
->         injects `CommandRouter` because it instantiates it via its [`@Inject`]
->         constructor. These different uses of the word "injects" can get
->         confusing, so we're using the more explicit terms in this tutorial.
+> *   [`@Inject`] 构造函数的参数是这个类的依赖。
+>     Dagger 将提供类的依赖关系以实例化该类
+>     本身。请注意，这是递归的：依赖项可能是其
+>     自身！
+> *   **术语：**
+>     *   在讨论这两种类型之间的关系时，
+>         可以说`CommandRouter` _要求_ `HelloWorldCommand` 或 `CommandRouter`
+>         _依赖于_ `HelloWorldCommand`。相反的，`HelloWorldCommand` 的
+>         `@Inject` 构造函数 _提供_ `CommandRouter` _要求_ 的
+>        `HelloWorldCommand` 实例。
+>     *   有时人们会说 `CommandRouter` _注入_ `HelloWorldCommand`是
+>         为了强调将一个`HelloWorldCommand`
+>         对象放入 `CommandRouter` 中，而不是 `CommandRouter` 本身
+>         获取或创建一个。但也常说 _Dagger_
+>         注入`CommandRouter`，因为它是通过 [@Inject`] 构造函数实例化的。
+>         `注入`一词的这些不同用法可能
+>         令人困惑，因此我们在本教程中使用更明确的术语。
 
 <section style="text-align: center" markdown="1">
 

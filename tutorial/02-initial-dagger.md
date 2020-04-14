@@ -3,8 +3,8 @@ layout: default
 title: Initial Dagger setup
 ---
 
-Let's change our example to actually use Dagger to create an instance of
-`CommandRouter`. We'll start by creating a [`@Component`] interface:
+让我们更改示例以实际使用 Dagger 创建一个 `CommandRouter` 实例。
+我们将从创建 [`@Component`] 接口开始：
 
 ```java
 @Component
@@ -13,12 +13,12 @@ interface CommandRouterFactory {
 }
 ```
 
-`CommandRouterFactory` is a normal factory type for `CommandRouter`s. Its
-implementation would call `new CommandRouter()` instead of our main method doing
-it. But instead of us writing the implementation of `CommandRouterFactory`, we
-can annotate it with [`@Component`] to have Dagger _generate_ an implementation
-for us: `DaggerCommandRouterFactory`. Note that it has a static `create()`
-method to give us an instance to use.
+`CommandRouterFactory` 是 `CommandRouter` 的常规工厂类型。
+它的实现将调用 `new CommandRouter()` 代替我们 main 方法中那样。
+但是，我们没有编写 `CommandRouterFactory` 的实现类，
+而是使用 [`@Component`] 对其进行注解，
+使 Dagger 为我们 _生成_  实现类:`DaggerCommandRouterFactory`。
+注意它有个给我们一个实例的静态方法 `create()`。
 
 ```java
 class CommandLineAtm {
@@ -35,8 +35,8 @@ class CommandLineAtm {
 }
 ```
 
-In order for Dagger to know how to create a `CommandRouter`, we also need to add
-an [`@Inject`] annotation to its constructor:
+为了使 Dagger 知道如何创建 `CommandRouter`，
+我们还需要为其构造函数添加 [`@Inject`] 注解：
 
 ```java
 final class CommandRouter {
@@ -47,26 +47,25 @@ final class CommandRouter {
 }
 ```
 
-The [`@Inject`] annotation indicates to Dagger that when we ask for a
-`CommandRouter`, Dagger should call `new CommandRouter()`.
+[`@Inject`] 注解向 Dagger 表示当我们需要
+`CommandRouter` 时，Dagger 应该调用 `new CommandRouter()`。
 
-> **Aside:** See [these instructions] for how to properly add Dagger to your
-> build.
+> **Aside:** 有关如何将 Dagger 正确添加到您的构建，请参见[这些说明]
 
-[these instructions]: https://github.com/google/dagger#installation
+[这些说明]: https://github.com/google/dagger#installation
 
-We haven't done much special yet, but we have the bare minimum for a Dagger
-application! Run the application again to see it in action.
+我们还没有做太多特别的事情，但是我们已经有一个满足 Dagger 最低要求的应用！
+再次运行该应用程序以查看其运行情况。
 
-> **CONCEPTS**
+> **概念**
 >
-> *   **[`@Component`]** tells Dagger to implement an `interface` or `abstract
->     class` that creates and returns one or more application objects.
->     *   Dagger will generate a class that implements the component type. The
->         generated type will be named `DaggerYourType` (or
->         `DaggerYourType_NestedType` for nested types)
-> *   **[`@Inject`]** on a constructor tells Dagger how to instantiate that
->     class. We'll see more shortly.
+> *   **[`@Component`] ** 告诉 Dagger 实现 `interface` 或 `abstract
+>     class` 创建并返回一个或多个对象。
+>     * Dagger 将生成一个实现 component 类型的类。
+>     生成的类将命名为 `DaggerYourType`（或
+>     `DaggerYourType_NestedType`用于嵌套类型）
+> *   **[`@Inject`]** 告诉 Dagger 如何实例化
+>    类。我们很快会看到更多。
 
 <section style="text-align: center" markdown="1">
 

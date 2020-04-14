@@ -15,7 +15,7 @@ title: Tutorial setup
 让我们从构建此应用程序的外壳开始，刚开始不使用 Dagger。
 如果某些方面看起来过于复杂，请耐心等待，因为一旦应用程序变大，Dagger 就开始展示其强大功能。
 
-首先，我们将为 ATM 可以处理的每个可能的文本命令创建一个`命令`界面。
+首先，我们将为 ATM 可以处理的每个可能的文本命令创建一个`Command` 接口。
 
 ```java
 /** Logic to process some user input. */

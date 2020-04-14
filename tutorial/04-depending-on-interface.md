@@ -3,10 +3,10 @@ layout: default
 title: Depending on an interface
 ---
 
-But wait: why does `CommandRouter`'s constructor need a `HelloWorldCommand`
-specifically? Shouldn't it be able to use any kind of `Command`?
+但是等等: 为什么 `CommandRouter` 的构造函数明确的需要一个 `HelloWorldCommand`？
+它不应该可以使用任何一种 `Command` 吗？
 
-Let's instead specify `CommandRouter`'s dependency as a plain `Command`:
+让我们将 `CommandRouter` 的依赖项指定为普通的 `Command`：
 
 ```java
 @Inject
@@ -15,11 +15,11 @@ CommandRouter(Command command) {
 }
 ```
 
-But now Dagger doesn't know how to get an instance of `Command`. If you try to
-compile, Dagger reports an error. Since `Command` is an _interface_ and can't
-have an [`@Inject`] constructor, we need to give Dagger more information.
+但是现在 Dagger 不知道如何获取 `Command` 的实例。如果您尝试
+编译，Dagger 报告错误。由于 `Command` 是 _接口_ 并且不能
+有 [`@Inject`] 构造函数，我们需要给 Dagger 更多信息。
 
-To do that, we can write a method annotated with [`@Binds`]:
+为此，我们可以编写一个带有 [`@Binds`] 注解的方法：
 
 ```java
 @Module
@@ -29,24 +29,24 @@ abstract class HelloWorldModule {
 }
 ```
 
-This [`@Binds`] method tells Dagger that when something depends on a `Command`,
-Dagger should provide a `HelloWorldCommand` object in its place. Notice that the
-return type of the method, `Command`, is the type that Dagger now knows how to
-provide, and the parameter type is the type that Dagger knows to use when
-something depends on `Command`.
+这个 [`@Binds`] 方法告诉 Dagger，当某些东西依赖于 `Command` 时，
+Dagger 应在其位置提供一个 `HelloWorldCommand` 对象。请注意
+方法的返回类型，`Command`，这是 Dagger 现在知道如何
+提供的类型，并且参数类型也是 Dagger 知道
+当某些东西依赖于`Command` 时使用的类型。
 
-The method is abstract because just its declaration is enough to tell Dagger
-what to do. Dagger does not actually call this method or provide an
-implementation for it.
+该方法是抽象的，因为仅它的声明就足以告诉Dagger
+该怎么办。 Dagger 实际上不会调用此方法或提供
+实现类。
 
-Notice that the [`@Binds`] method is declared in a type that's annotated with
-[`@Module`]. Modules are collections of binding methods (methods annotated with
-[`@Binds`] or a few other annotations as we'll see later) that give Dagger
-instructions on how to provide instances. Unlike [`@Inject`], which goes
-directly on a class's constructor, [`@Binds`] methods must be inside a module.
+请注意，[`@Binds`] 方法是声明在带 [`@Module`] 注解的类中。
+Module 是绑定方法（带 [`@Binds`] 注解的方法 或其他一些注解，
+我们将在后面看到）的集合，这些注解告诉 Dagger
+如何提供实例。与 [`@Inject`] 直接用在类的构造函数上不同，
+[`@Binds`] 方法必须在 Module 内部。
 
-To tell Dagger to look for that [`@Binds`] method in `HelloWorldModule`, we add
-it to the [`@Component`] annotation.
+为了告诉 Dagger 在 `HelloWorldModule` 中寻找 [`@Binds`] 方法，我们将
+它添加到 [`@Component`] 注解中。
 
 ```java
 @Component(modules = HelloWorldModule.class)
@@ -55,34 +55,34 @@ interface CommandRouterFactory {
 }
 ```
 
-> **Aside:** You might be wondering why it is that we don't need a [`@Module`]
-> to tell Dagger about the [`@Inject`]-annotated classes we need as well. The
-> answer is that Dagger already knows to look at those types because they appear
-> somewhere in a component or module that Dagger is using. In the case of
-> `CommandRouter`, it's the return type of the `CommandRouterFactory`'s entry
-> point method. And in the case of `HelloWorldCommand`, it's the parameter type
-> of the [`@Binds`] method we just wrote in `HelloWorldModule`. And before that,
-> it appeared as a constructor parameter to `CommandRouter`, so Dagger learned
-> about it transitively when looking at `CommandRouter`.
+> **Aside:** 您可能想知道为什么我们不需要 [`@Module`]
+> 告诉Dagger我们也需要 [@Inject`] 注释的类。
+> 答案是 Dagger 已经知道要查看这些类型，因为它们出现了
+>  Dagger 使用的 component 或 module 中的某处。如果是
+> `CommandRouter`，这是`CommandRouterFactory` 条目的返回类型
+> 点法。在`HelloWorldCommand` 的情况下，它是参数类型
+> 是我们刚刚在 `HelloWorldModule` 中编写的 [`@Binds`] 方法的。在那之前
+> 它作为 `CommandRouter`的构造函数参数出现，因此Dagger获悉
+> 在查看`CommandRouter` 时可传递。
 
-Now when Dagger looks to create a `CommandRouter` and sees that it needs a
-`Command`, it will use the instructions in `HelloWorldModule` to create one.
+现在，当 Dagger 要创建`CommandRouter` 并看到它需要一个
+`Command`，它将使用 `HelloWorldModule` 中的指令创建一个。
 
-With this change, our application should continue to work just like it did
-before, but our `CommandRouter` class is no longer forced to only work with one
-kind of `Command`.
+进行此更改后，我们的应用程序应像以前一样继续工作，
+但是我们的 `CommandRouter` 类不再被迫仅使用一个
+类型的 `Command`。
 
-> **CONCEPTS**
+> **概念**
 >
-> *   **[`@Module`]s** are classes or interfaces that act as collections of
->     instructions for Dagger on how to construct dependencies. They're called
->     modules because they are _modular_: you can mix and match modules in
->     different applications and contexts.
-> *   **[`@Binds`]** methods are one way to tell Dagger how to construct an
->     instance. They are abstract methods on modules that associate one type
->     that Dagger already knows how to construct (the method's parameter) with a
->     type that Dagger doesn't yet know how to construct (the method's return
->     type).
+> *   **[`@Module`]** 是类或接口，充当
+>     Dagger 如何构造依赖项的指令集和 。他们被称为
+>     module，因为它们是 _modular模块化_ 的：您可以在不同的应用或上下文中
+>     混合、匹配 module。
+> *   **[`@binds`]** 方法是告诉 Dagger 如何构造
+>     实例。它们是模块中的抽象方法，
+>     将 Dagger 已经知道如何构造的类型（方法的参数） 与
+>     Dagger 尚不知道如何构造的类型（该方法的返回值
+>     类型）进行关联。
 
 <section style="text-align: center" markdown="1">
 
