@@ -5,43 +5,39 @@ redirect_from:
   - /android
 ---
 
-One of the primary advantages of Dagger 2 over most other dependency injection
-frameworks is that its strictly generated implementation (no reflection) means
-that it can be used in Android applications. However, there _are_ still some
-considerations to be made when using Dagger within Android applications.
+与大多数其他依赖项注入框架相比，
+Dagger 2的主要优点之一是其严格生成的实现（无反射），
+意味着它可以在 Android 应用程序中使用。
+但是，在 Android 应用程序中使用 Dagger 时，仍然需要考虑一些注意事项。
 
-## Philosophy
+## 原理
 
-While code written for Android is Java source, it is often quite different in
-terms of style.  Typically, such differences exist to accomodate the unique
-[performance][android-performance] considerations of a mobile platform.
+虽然为 Android 编写的代码是 Java 源代码，
+但是在样式方面常常大不相同。
+通常，存在这样的差异以适应移动平台独特的 [performance][android-performance] 注意事项。
 
-But many of the patterns commonly applied to code intended for Android are
-contrary to those applied to other Java code.  Even much of the advice in
-[Effective Java][effective-java] is considered inappropriate for Android.
+但是通常应用于Android代码的许多模式与应用于其他Java代码的模式相反。
+甚至 [Effective Java][effective-java]  中的很多建议都不适用于Android。
 
-In order to achieve the goals of both idiomatic and portable code, Dagger
-relies on [ProGuard] to post-process the compiled bytecode.  This allows Dagger
-to emit source that looks and feels natural on both the server and Android,
-while using the different toolchains to produce bytecode that executes
-efficiently in both environments.  Moreover, Dagger has an explicit goal to
-ensure that the Java source that it generates is consistently compatible with
-ProGuard optimizations.
+为了实现惯用代码且可移植代码的目标，
+Dagger依靠[ProGuard]对已编译的字节码进行后处理。
+这使Dagger可以生成在服务器和Android上看起来和感觉自然的源代码，
+同时使用不同的工具链来生成在两种环境中都能高效执行的字节码。
+此外，Dagger的明确目标是确保其生成的Java源代码始终与ProGuard优化兼容。
 
-Of course, not all issues can be addressed in that manner, but it is the primary
-mechanism by which Android-specific compatibility will be provided.
+当然，并非所有问题都可以通过这种方式解决，
+但这是提供Android特定兼容性的主要机制。
 
 ### tl;dr
 
-Dagger assumes that users on Android will use R8 or ProGuard.
+Dagger假定Android上的用户将使用R8或ProGuard。
 
-## Why Dagger on Android is hard
+## 为什么在Android上使用Dagger很难
 
-One of the central difficulties of writing an Android application using Dagger
-is that many Android framework classes are instantiated by the OS itself, like
-`Activity` and `Fragment`, but Dagger works best if it can create all the
-injected objects. Instead, you have to perform members injection in a lifecycle
-method. This means many classes end up looking like:
+使用Dagger编写Android应用程序的主要困难之一是，
+许多Android框架类都是由OS本身实例化的，
+例如`Activity` 和 `Fragment`，但是Dagger如果能够创建所有注入的对象，则效果最佳。
+相反，您必须在生命周期方法中执行成员注入。这意味着许多类最终看起来像：
 
 ```java
 public class FrombulationActivity extends Activity {
@@ -62,46 +58,39 @@ public class FrombulationActivity extends Activity {
 }
 ```
 
-This has a few problems:
+这有一些问题:
 
-1. Copy-pasting code makes it hard to refactor later on. As more and more
-   developers copy-paste that block, fewer will know what it actually does.
+1. 复制粘贴代码使以后很难重构。随着越来越多的开发人员复制粘贴该块，越来越少的人会知道它的实际作用。
 
-2. More fundamentally, it requires the type requesting injection
-   (`FrombulationActivity`) to know about its injector. Even if this is done
-   through interfaces instead of concrete types, it breaks a core principle of
-   dependency injection: a class shouldn't know anything about how it is
-   injected.
+2. 从根本上讲，它需要请求注入的类型 (`FrombulationActivity`) 来了解其注入器。
+即使这是通过接口而不是具体类型完成的，它也打破了依赖注入的核心原则：类不应该知道如何注入依赖。
 
 ## `dagger.android`
 
-The classes in [`dagger.android`] offer one approach to simplify the above
-problems. This requires learning some extra APIs and concepts but gives you
-reduced boilerplate and injection in your Android classes at the right place in
-the lifecycle.
+[`dagger.android`] 中的类提供了一种简化上述问题的方法。
+这需要学习一些额外的API和概念，
+但可以在生命周期的正确位置减少Android类中的样板代码和注入。
 
-Another approach is to just use the normal Dagger APIs and follow guides such as
-the one
-[here](https://developer.android.com/training/dependency-injection/dagger-android).
-This may be simpler to understand but comes with the downside of having to write
-extra boilerplate manually.
+另一种方法是只使用常规的Dagger API并遵循 
+[here](https://developer.android.com/training/dependency-injection/dagger-android) 的指南。
+这可能更容易理解，但缺点是必须手动编写额外的样板。
 
 
-The Jetpack and Dagger teams are working together on a
-[new initiative](https://medium.com/androiddevelopers/dependency-injection-guidance-on-android-ads-2019-b0b56d774bc2)
-for Dagger on Android that hopes to be a large shift from the current status
-quo. While it is unfortunately not ready yet, this may be something to consider
-when choosing how to use Dagger in your Android projects today.
+Jetpack和Dagger团队正在共同为Android上的Dagger制定一项
+[新计划](https://medium.com/androiddevelopers/dependency-injection-guidance-on-android-ads-2019-b0b56d774bc2)，
+希望成为与目前的状况大相径庭。
+不幸的是，虽然它还没有准备好，当您选择如何在现在的Android项目中使用Dagger时，
+可能需要考虑一下这一点。
 
-### Injecting `Activity` objects
+### 注入 `Activity` 对象
 
-1.  Install [`AndroidInjectionModule`] in your application component to ensure
-    that all bindings necessary for these base types are available.
+1.  在您的应用程序组件中安装[`AndroidInjectionModule`]，
+    以确保这些基本类型所需的所有绑定均可用。
 
-2.  Start off by writing a `@Subcomponent` that implements
-    [`AndroidInjector<YourActivity>`][AndroidInjector], with a
-    `@Subcomponent.Factory` that extends
-    [`AndroidInjector.Factory<YourActivity>`][AndroidInjector.Factory]:
+2.  从写一个实现
+    [`AndroidInjector<YourActivity>`][AndroidInjector] 的`@Subcomponent`开始, 和一个
+     扩展自[`AndroidInjector.Factory<YourActivity>`][AndroidInjector.Factory]
+     的 `@Subcomponent.Factory`:
 
     ```java
     @Subcomponent(modules = ...)
@@ -111,9 +100,9 @@ when choosing how to use Dagger in your Android projects today.
     }
     ```
 
-3.  After defining the subcomponent, add it to your component hierarchy by
-    defining a module that binds the subcomponent factory and adding it to the
-    component that injects your `Application`:
+3.  定义子组件之后，通过以下方式将其添加到组件层次结构中，
+    定义一个绑定子组件工厂的模块，并将其添加到
+    注入您的`Application`:
 
     ```java
     @Module(subcomponents = YourActivitySubcomponent.class)
@@ -145,8 +134,8 @@ when choosing how to use Dagger in your Android projects today.
     abstract YourActivity contributeYourAndroidInjector();
     ```
 
-4.  Next, make your `Application` implement [`HasAndroidInjector`]
-    and `@Inject` a
+4.  接下来，让你的`Application` 实现 [`HasAndroidInjector`]
+    并 `@Inject` a
     [`DispatchingAndroidInjector<Object>`][DispatchingAndroidInjector] to
     return from the `androidInjector()` method:
 
@@ -168,9 +157,9 @@ when choosing how to use Dagger in your Android projects today.
     }
     ```
 
-5.  Finally, in your `Activity.onCreate()` method, call
-    [`AndroidInjection.inject(this)`][AndroidInjection.inject(Activity)]
-    *before* calling `super.onCreate();`:
+5.  最后, 在`Activity.onCreate()` 方法中, 
+    在调用 `super.onCreate();`*之前* 调用 
+    [`AndroidInjection.inject(this)`][AndroidInjection.inject(Activity)]:
 
     ```java
     public class YourActivity extends Activity {
@@ -181,9 +170,9 @@ when choosing how to use Dagger in your Android projects today.
     }
     ```
 
-6.  Congratulations!
+6.  恭喜啦!
 
-#### How did that work?
+#### 那是怎么工作的？
 
 `AndroidInjection.inject()` gets a `DispatchingAndroidInjector<Object>` from
 the `Application` and passes your activity to `inject(Activity)`. The
@@ -192,7 +181,7 @@ activity’s class (which is `YourActivitySubcomponent.Factory`), creates the
 `AndroidInjector` (which is `YourActivitySubcomponent`), and passes your
 activity to `inject(YourActivity)`.
 
-### Injecting `Fragment` objects
+### 注入`Fragment`对象
 
 Injecting a `Fragment` is just as simple as injecting an `Activity`. Define your
 subcomponent in the same way.
@@ -257,7 +246,7 @@ abstract class YourFragmentModule {
 public interface YourActivityOrYourApplicationComponent { ... }
 ```
 
-### Base Framework Types
+### 基本框架类型
 
 Because `DispatchingAndroidInjector` looks up the appropriate
 `AndroidInjector.Factory` by the class at runtime, a base class can implement
@@ -284,11 +273,11 @@ instead.
 For users of the Android support library, parallel types exist in the
 `dagger.android.support` package.
 
-> TODO(ronshapiro): we should begin to split this up by androidx packages
+> TODO(ronshapiro):我们应该开始通过androidx软件包对此进行拆分
 
-### How do I get it?
+### 我如何得到它？
 
-Add the following to your build.gradle:
+将以下内容添加到您的build.gradle中：
 
 ```groovy
 dependencies {
@@ -301,7 +290,7 @@ dependencies {
 
 <a name="when-to-inject"></a>
 
-## When to inject
+## 什么时候注入
 
 Constructor injection is preferred whenever possible because `javac` will ensure
 that no field is referenced before it has been set, which helps avoid
@@ -320,7 +309,7 @@ compiler error to call `AndroidInjection.inject()` after `super.onCreate()`.
 
 ## FAQ
 
-### Scoping `AndroidInjector.Factory`
+### 定义 AndroidInjector.Factory
 
 `AndroidInjector.Factory` is intended to be a stateless interface so that
 implementors don't have to worry about managing state related to the object
