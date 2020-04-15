@@ -3,7 +3,7 @@ layout: default
 title: A new command
 ---
 
-Let's add a new command for logging in to the ATM:
+让我们添加一个新命令从而登录 ATM：
 
 ```java
 final class LoginCommand extends SingleArgCommand {
@@ -27,11 +27,11 @@ final class LoginCommand extends SingleArgCommand {
 }
 ```
 
-(The abstract `SingleArgCommand` we're using for simplicity is defined
-[here][SingleArgCommand]).
+(为简单起见，我们定义了抽象的`SingleArgCommand`
+[here][SingleArgCommand])。
 
-We can create a `LoginCommandModule` like our `HelloWorldModule` to bind
-`LoginCommand` as a `Command`:
+我们可以像 `HelloWorldModule` 一样创建一个 `LoginCommandModule` 来绑定
+`LoginCommand` 作为`Command` 的实现：
 
 ```java
 @Module
@@ -41,15 +41,15 @@ abstract class LoginCommandModule {
 }
 ```
 
-To start using the `LoginCommand` in `CommandRouter`, we'll replace
-`HelloWorldModule` in the [`@Component`] annotation with `LoginCommandModule`.
-Run the application and try to log in.
+为了开始在 `CommandRouter` 中使用 `LoginCommand`，
+我们将使用`LoginCommandModule` 替代 [`@Component`] 注解中的`HelloWorldModule`。
+运行该应用程序，然后尝试登录。
 
-This begins to show some of the benefits of using Dagger. With a one line
-_declarative_ change, we were able to change what `Command` was received by
-`CommandRouter`. `CommandRouter` had no changes, it just worked. Using this
-approach, you can write many different versions of your application and reuse
-code without massive changes.
+这开始显示出使用 Dagger 的一些好处。
+一行 _声明_ 的改变，使得我们可以更改 `CommandRouter` 接收到的 `Command`。 
+`CommandRouter` 没有任何变化，它可以正常工作。
+使用这个方法，您可以编写许多不同版本的应用程序并重复使用
+无需大量更改的代码。
 
 <section style="text-align: center" markdown="1">
 

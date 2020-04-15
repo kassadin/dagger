@@ -3,16 +3,16 @@ layout: default
 title: An abstraction for output
 ---
 
-Right now, `HelloWorldCommand` uses `System.out.println()` to write its output.
-In the spirit of dependency injection, let's use an abstraction so that we can
-remove this direct use of `System.out`. What we'll do is create an `Outputter`
-type that does something with text that's written to it. Our default
-implementation can still use `System.out.println()`, but this gives us
-flexibility to change that later without changing `HelloWorldCommand`. For
-example, our tests may use an implementation that adds the string to a
-`List<String>` so we can check what was output.
+现在，`HelloWorldCommand` 使用 `System.out.println()` 来进行输出。
+本着依赖注入的精神，让我们使用一个抽象，
+以便我们可以删除对 `System.out` 的直接使用。
+我们要做的是创建一个 `Outputter` 类型，它可以对写入的文本执行某些操作。
+我们的默认实现仍然可以使用 `System.out.println()`，
+但这给了我们更多灵活性，以后的更改无需修改 `HelloWorldCommand` 。
+例如，我们的测试可能会使用一个将字符串添加到
+`List<String>` 的实现，所以我们能检查输出了什么。
 
-Here's our `Outputter` type:
+这是我们的 `Outputter` 类型：
 
 ```java
 interface Outputter {
@@ -20,7 +20,7 @@ interface Outputter {
 }
 ```
 
-And here's how we'd use it in `HelloWorldCommand`:
+这是我们在 `HelloWorldCommand` 中使用它的方式：
 
 ```java
 private final Outputter outputter;
@@ -37,12 +37,12 @@ public Status handleInput(List<String> input) {
 }
 ```
 
-`Outputter` is an `interface`. We could write an implementation of it, give that
-class an [`@Inject`] constructor, and then use [`@Binds`] to bind `Outputter` to
-that implementation. But `Outputter` is very simple … so simple that we could
-even implement it as a lambda or method reference. So instead of doing all that,
-let's write a `static` method that just creates and returns an instance of
-`Outputter` itself!
+`Outputter` 是一个接口。我们可以写一个它的实现，
+给这个类一个 [`@Inject`] 构造函数，然后使用 [`@Binds`] 将 `Outputter` 绑定到
+该实现。但是 `Outputter` 很简单…很简单，我们可以
+甚至将其实现为 lambda 或方法引用。因此，与其做所有这些，
+让我们编写一个 `static` 方法，该方法仅创建并返回
+`Outputter` 的一个实例本身！
 
 ```java
 @Module
@@ -54,13 +54,13 @@ abstract class SystemOutModule {
 }
 ```
 
-Here we've created another [`@Module`], but instead of a [`@Binds`] method we
-have a [`@Provides`] method. A [`@Provides`] method works a lot like an
-[`@Inject`] constructor: here it tells Dagger that when it needs an instance of
-`Outputter`, it should _call_ `SystemOutModule.textOutputter()` to get one.
+在这里，我们创建了另一个 [`@Module`]，但是我们使用的不是 [`@Binds`] 方法，是 [`@Provides`] 方法。 
+[`@Provides`] 方法的工作原理与 [`@Inject`] 构造函数很像：
+它在这里告诉 Dagger 当它需要一个 `Outputter` 实例时，
+dagger 应该 _调用_ `SystemOutModule.textOutputter()` 从而获取一个。
 
-Again, we'll need to add our new module to our component definition to tell
-Dagger that it should use that module for our application:
+同样，我们需要将新模块添加到组件中以告知
+dagger 说它应该在我们的应用程序中使用该模块：
 
 ```java
 class CommandLineAtm {
@@ -73,25 +73,24 @@ class CommandLineAtm {
 }
 ```
 
-Once again, nothing has changed about the _behavior_ of our application, but
-it's now easy to write unit tests for our command without causing it to actually
-write to `System.out`.
+再次，我们的应用程序的 _行为_ 并没有改变，
+但是现在很容易为我们的命令编写单元测试，
+而无需实际执行写入`System.out`。
 
-> **CONCEPTS**
+> **概念**
 >
-> *   **[`@Provides`]** methods are concrete methods in a module that tell
->     Dagger that when something requests an instance of the type the method
->     returns, it should call that method to get an instance. Like [`@Inject`]
->     constructors, they can have parameters: those parameters are their
->     dependencies.
-> *   [`@Provides`] methods can contain arbitrary code as long as they return an
->     instance of the provided type. They do not need to create a new instance
->     on each invocation.
->     *   This highlights an important aspect of Dagger (and dependency
->         injection as a whole): when a type is requested, whether or not a new
->         instance is created to satisfy that request is an implementation
->         detail. Going forward, we'll use the term "provided" instead of
->         "created", as that is more accurate for what is happening.
+> *   **[`@Provides`]** 方法是模块中的具体方法，可以告诉
+>     dagger，当某些东西请求该方法的返回类型的实例时，
+>     ​​则应调用该方法以获取实例。
+>     像 [`@Inject`] 构造函数，它们可以有参数：
+>     这些参数是它们的依赖。
+> *   [`@Provides`] 方法可以包含任意代码，只要它们返回一个
+>     提供的类型的实例。他们不需要在每次调用创建新实例。
+>     *   这突出了 Dagger （和整个依赖注入）的一个重要方面：
+>         当请求类型时，是否输入新的
+>         实例以满足该请求是实现细节
+>         之后，我们将使用术语 `provided` 代替 `created`，
+>         因为它对正在发生的情况描述的更准确。
 
 <section style="text-align: center" markdown="1">
 

@@ -55,15 +55,15 @@ interface CommandRouterFactory {
 }
 ```
 
-> **Aside:** 您可能想知道为什么我们不需要 [`@Module`]
-> 告诉Dagger我们也需要 [@Inject`] 注释的类。
+> **Aside:** 您可能想知道, 为什么我们不需要 [`@Module`]
+> 告诉 Dagger 我们也需要 [`@Inject`] 注释的类。
 > 答案是 Dagger 已经知道要查看这些类型，因为它们出现了
->  Dagger 使用的 component 或 module 中的某处。如果是
-> `CommandRouter`，这是`CommandRouterFactory` 条目的返回类型
-> 点法。在`HelloWorldCommand` 的情况下，它是参数类型
-> 是我们刚刚在 `HelloWorldModule` 中编写的 [`@Binds`] 方法的。在那之前
-> 它作为 `CommandRouter`的构造函数参数出现，因此Dagger获悉
-> 在查看`CommandRouter` 时可传递。
+> Dagger 使用的 component 或 module 中的某处。比如
+> `CommandRouter`，这是`CommandRouterFactory` 入口方法的返回类型
+> 再比如 `HelloWorldCommand`，它是我们刚刚在 `HelloWorldModule`
+> 中编写的 [`@Binds`] 方法的参数类型。在那之前
+> 它作为 `CommandRouter` 的构造函数参数出现，因此 Dagger
+> 在查看 `CommandRouter` 时可传递性的了解到它。
 
 现在，当 Dagger 要创建`CommandRouter` 并看到它需要一个
 `Command`，它将使用 `HelloWorldModule` 中的指令创建一个。
