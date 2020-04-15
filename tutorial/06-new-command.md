@@ -1,6 +1,6 @@
 ---
 layout: default
-title: A new command
+title: 一个新的命令
 ---
 
 让我们添加一个新命令从而登录 ATM：

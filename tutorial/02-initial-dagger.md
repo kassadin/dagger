@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Initial Dagger setup
+title: 初始化 Dagger 设置
 ---
 
 让我们更改示例以实际使用 Dagger 创建一个 `CommandRouter` 实例。

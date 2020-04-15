@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Depending on an interface
+title: 接口依赖
 ---
 
 但是等等: 为什么 `CommandRouter` 的构造函数明确的需要一个 `HelloWorldCommand`？

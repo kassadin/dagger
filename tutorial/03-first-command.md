@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Adding our first `Command`
+title: 添加第一个`Command`
 ---
 
 如果您到目前为止已尝试运行该示例，则会看到它不知道如何

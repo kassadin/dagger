@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Two commands for the price of one
+title: Two commands for the price of one 买一赠二？
 ---
 
 到目前为止，`CommandRouter` 一次仅支持一个命令，

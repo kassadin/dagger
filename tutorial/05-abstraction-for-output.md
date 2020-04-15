@@ -1,6 +1,6 @@
 ---
 layout: default
-title: An abstraction for output
+title: 对输出进行抽象
 ---
 
 现在，`HelloWorldCommand` 使用 `System.out.println()` 来进行输出。
