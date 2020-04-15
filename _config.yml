@@ -34,7 +34,7 @@ nav:
       name: Home
       url: /
   - item:
-      name: Dev Guide
+      name: "开发指南"
       url: /dev-guide
       sidenav:
         - item:
@@ -68,29 +68,29 @@ nav:
             name: gRPC
             url: /grpc
         - item:
-            name: FAQ
+            name: "常见问题"
             url: /faq
   - item:
-      name: "Tutorial Codelab"
+      name: "教程 代码实验室"
       url: /tutorial
       sidenav:
         - item:
-            name: Setup
+            name: "教程设置"
             url: /01-setup
         - item:
-            name: "Initial Dagger"
+            name: "初始化 Dagger"
             url: /02-initial-dagger
         - item:
-            name: "First command"
+            name: "第一个命令"
             url: /03-first-command
         - item:
-            name: "Depending on interfaces"
+            name: "接口依赖"
             url: /04-depending-on-interface
         - item:
-            name: "Abstraction for output"
+            name: "抽象输出"
             url: /05-abstraction-for-output
         - item:
-            name: "New command"
+            name: "新的命令"
             url: /06-new-command
         - item:
             name: "Two for the price of one"
